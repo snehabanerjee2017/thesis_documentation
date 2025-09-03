@@ -1,0 +1,39 @@
+\section{Summary}
+\subsection{Conclusion}
+The primary goal of this thesis was to create a source library to be used for transfer learning approaches in bin picking applications at \ac{IPA}. This is achieved at the end of the thesis work. A chosen number of objects collectively represent the entire ABC dataset \cite{Koch_2019_CVPR} consisting of one million 3D point clouds. It can be qualitatively justified that the representative members of the dataset are quite diverse in nature.
+
+\vspace{5mm}
+
+A deep learning algorithm is implemented and evaluated which is capable of processing any dataset containing points clouds of the objects. The algorithm is capable of generating latent space representations of the objects with any number of dimensions as deemed fit according to the user. The two backbones used in this network are the PointNet Autoencoder and the \ac{DGCNN}. This thesis also evaluates the performance of different clustering algorithms for the purpose of generating representative members of the dataset in hand which constitute as a diverse collection of source data. The clustering algorithms evaluated in this procedure are k-medoids, \ac{HDBSCAN}, spectral clustering and agglomerative clustering. A new concept called multi-level \ac{HDBSCAN} algorithm is also proposed in this thesis keeping the limitations in this use-case in mind which is illustrated in the next section.  Thus, this thesis is able to develop a framework of the network and the data which can be used further by the transfer learning approaches. 
+
+\vspace{5mm}
+
+The best performance is attained by the model with PointNet Autoencoder as backbone. Several hyperparameter tuning is performed to improve the performance of the model. Using this model has a plethora of benefits. The performance of the clustering algorithms on the output of this model is better as compared to both the existent network at \ac{IPA} and also the model with the \ac{DGCNN} backbone. The training time for this model is significantly lower which facilitated further hyperparameter-tuning resulting in improved results. 
+
+\subsection{Limitations}
+\label{sec:limitations}
+There were several challenges encountered during the course of the thesis work. Each sample had 2048 points in the point cloud of the objects. This is essential for learning the features of the objects to eventually come up with accurate feature representation. But this also makes it a dataset with high dimensionality. To tackle such large dataset with individual sample having high dimensions, the concept of dimensionality reduction had to be incorporated. This resulted in additional time in the pipeline and also loss of information about the data to some extent. But this step is extremely necessary to achieve the final goal of the thesis. There is loss of information about the objects due to dimensionality reduction. But there is no way to quantize how much of the information is actually lost. The hardware available served as a challenge when dealing with large datasets like the ABC dataset \cite{Koch_2019_CVPR}. There are systems available at \ac{IPA} with \ac{GPU}s of higher capacity. But since there are multiple ongoing projects, they were not available for use during this thesis.
+
+\vspace{5mm}
+
+Another very obvious problem already existing in these type of tasks is evaluating the performance of the clustering algorithms in unsupervised learning paradigm. Though the availability of the \ac{DBCV} index helped this situation to some extent, it incorporated challenges of its own. Calculating the \ac{DBCV} score depended heavily on the number of features of the datapoints. In the presence of a large number of features, it is impossible to work with such high dimensional data in the available hardware setup mentioned in Ch. \ref{sec:hardware}. This is a primary reason why the concept of dimensionality reduction had to be used. Because of how the \ac{DBCV} algorithm works, evaluating the performance of the clustering algorithms while considering all the datapoints together is unfeasible. So the performance of the clustering algorithm had to be evaluated for a smaller subset of the dataset. This made it crucial to verify if the performance followed a similar trend even for higher number of datapoints and the results obtained while working with a smaller subset of the dataset is enough to derive logical conclusions.
+
+\vspace{5mm}
+
+Furthermore, a unifying evaluation metric that gives the same preference to globular and non-globular clusters is not available. The prevalent metrics tend to have a bias towards either of the two. In the presence of high dimensional dataset such as the ABC dataset \cite{Koch_2019_CVPR}, it is not possible to visualize the entire dataset in high dimensional space to decide whether the clusters are convex or non-convex in nature. Thus, the decision of which metric to use cannot be relied on the visualization of the representations of the actual objects. Therefore, it is completely based on the theoretical aspect and the expected outcomes of the same. 
+
+\vspace{5mm}
+As documented in Ch. \ref{sec:conclu_dgcnn}, it is seen that the training time of the ConClu approach with the \ac{DGCNN} backbone is significantly high in the current hardware setup as mentioned in \ref{sec:hardware}. In the absence of better hardware resources it is infeasible to conduct further studies in this limited time frame with this backbone in the search of better results. 
+
+\subsection{Future Scope}
+
+The source library and the framework suggested in this thesis can be used for further transfer learning tasks down the pipeline. The performance of those approaches with the existing library at \ac{IPA} can be compared to that of this newly created source library. Finding a better clustering evaluation metric while keeping the current limitations is an open point for further research. 
+
+\vspace{5mm}
+
+Furthermore, it is seen that the performance of spectral clustering algorithm is often comparable to that of multi-level \ac{HDBSCAN} algorithm. But it required an impractical amount of time for the spectral clustering algorithm to converge. The hyperparameters in spectral clustering could be fine-tuned to evaluate if it ameliorates the convergence time. Moreover, in the presence of better hardware resources like \ac{GPU} clusters it could be possible to perform spectral clustering algorithm on such large dataset in a practical duration of time. 
+
+\vspace{5mm}
+
+Also, it is noticed that the network with \ac{DGCNN} backbone is quite 
+computationally expensive. Better hardware setup might facilitate fine-tuning of its hyperparameters to further improve the results. Having better hardware setup would also mean more number of samples could be evaluated at once during calculating the \ac{DBCV} score. This could further help in improving the quality of the results. The values of certain parameters are set according to \cite{mei2022unsupervised}, specially in the  Sinkhorn-Knopp algorithm module. Better domain knowledge could possibly improve the performance, if the hyperparameters are fine-tuned further. Therefore, if some of the limitations can be circumnavigated, the performance can be improved even further.
